@@ -29,6 +29,8 @@ class MotorcycleGalleryApp {
         this.setupFilter();
     }
     renderMotorcycles(motorcycles) {
+        if (!motorcycles || motorcycles.length === 0)
+            return;
         const grid = document.getElementById("motorcycle-grid");
         const resultsNumber = document.getElementById("results-number");
         if (!grid || !resultsNumber)

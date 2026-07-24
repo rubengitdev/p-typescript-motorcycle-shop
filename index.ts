@@ -56,6 +56,7 @@ class MotorcycleGalleryApp {
     }
 
     renderMotorcycles(motorcycles: Motorcycle[]): void {
+        if (!motorcycles || motorcycles.length === 0) return;
         const grid = document.getElementById("motorcycle-grid");
         const resultsNumber = document.getElementById("results-number");
 
