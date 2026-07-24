@@ -1,33 +1,10 @@
-type Category =
-    | "Sport"
-    | "Cruiser"
-    | "Touring"
-    | "Dirt"
-    | "Adventure"
-    | "Naked"
-    | "Electric";
-
-interface Motorcycle {
-    id: string;
-    name: string;
-    manufacturer: string;
-    category: Category;
-    price: number;
-    image_url: string;
-    created_at: Date;
-    description: string;
-    year: number;
-}
-
-async function fetchMotorcycles(): Promise<Motorcycle[]> {
-    const response = await fetch(
-        "https://cdn.freecodecamp.org/curriculum/labs/data/motorcycles.json",
-    );
-    const data: Motorcycle[] = await response.json();
+"use strict";
+async function fetchMotorcycles() {
+    const response = await fetch("https://cdn.freecodecamp.org/curriculum/labs/data/motorcycles.json");
+    const data = await response.json();
     return data;
 }
-
-function renderMotorcycleCard(motorcycle: Motorcycle): string {
+function renderMotorcycleCard(motorcycle) {
     return `
     <div class="motorcycle-card">
         <img class="motorcycle-card-image-container" src="${motorcycle.image_url}" alt="${motorcycle.name}" />
@@ -41,44 +18,31 @@ function renderMotorcycleCard(motorcycle: Motorcycle): string {
     </div>
     `;
 }
-
 class MotorcycleGalleryApp {
-    private allMotorcycles: Motorcycle[] = [];
-
     constructor() {
+        this.allMotorcycles = [];
         this.init();
     }
-
-    private async init(): Promise<void> {
+    async init() {
         this.allMotorcycles = await fetchMotorcycles();
         this.renderMotorcycles(this.allMotorcycles);
         this.setupFilter();
     }
-
-    renderMotorcycles(motorcycles: Motorcycle[]): void {
+    renderMotorcycles(motorcycles) {
         const grid = document.getElementById("motorcycle-grid");
         const resultsNumber = document.getElementById("results-number");
-
-        if (!grid || !resultsNumber) return;
-
+        if (!grid || !resultsNumber)
+            return;
         grid.innerHTML = motorcycles.map(renderMotorcycleCard).join("");
         resultsNumber.textContent = motorcycles.length.toString();
     }
-
-    private setupFilter(): void {
-        const input = document.getElementById(
-            "name-filter-input",
-        ) as HTMLInputElement;
-
+    setupFilter() {
+        const input = document.getElementById("name-filter-input");
         input.addEventListener("input", () => {
             const searchTerm = input.value.toLowerCase();
-            const filtered = this.allMotorcycles.filter((m) =>
-                m.name.toLowerCase().includes(searchTerm),
-            );
-
+            const filtered = this.allMotorcycles.filter((m) => m.name.toLowerCase().includes(searchTerm));
             this.renderMotorcycles(filtered);
         });
     }
 }
-
 new MotorcycleGalleryApp();
